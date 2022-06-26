@@ -1,6 +1,7 @@
 # TypeScript default
 !jest.config.js
 *.d.ts
+package-lock.json
 
 # CDK asset staging directory
 .cdk.staging
