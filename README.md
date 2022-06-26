@@ -1,4 +1,36 @@
-# cdk-nodejs
+# cdk-typescript
+
+## Getting started
+1. Checkout `bin/index.ts` for instantiating your stacks
+2. Check `src/` for your stack definitions
+3. Check `lambdas/` for your lambda functions
+4. To deploy current stack, run
+```shell
+> gulp deploy --env dev # will run bootstrap then deploy
+```
+
+TODO: Create much detailed getting started guide
+
+## CDK tasks
+
+The project utilizes `gulp` to create and run tasks.
+This enables us to do things before actually running the predefined CDK tasks, for example:
+
+- resolving and using SSO credentials from running `aws sso login`;
+- resolving configurations from config files in `configs/` and configurations passed in the command line, then converting the
+configurations into runtime contexts that CDK supports;
+- standardising the CDK toolkit name and parameters supported
+by CDK tasks
+
+Most of the CDK tasks should be supported and can be invoked by running:
+
+```sh
+gulp synth \                # cdk task; enum: synth, diff, deploy, destroy
+    --env dev \             # environment to deploy to; enum: dev, sit, uat, prod
+   [--stack '*'] \          # optional; pattern of stack id to deploy; default is '*' deploys all stack
+   [--region eu-west-1] \   # optional; aws region; default is us-east-1
+   [...--context Key=value] # optional; runtime configurations; overwrites configuration from config files; accessible in cdk through runtime contexts
+```
 
 ## Prerequisite
 
@@ -31,25 +63,4 @@ $ aws sso login --profile my-first-sso-profile
 # Get and store another set of temporary credentials for my-second-sso-profile
 # Does not overwrite / compromise the first profile's credentials
 $ aws sso login --profile my-second-sso-profile
-```
-
-## CDK tasks
-
-The project utilizes `gulp` to create and run tasks.
-This enables us to do things before actually running the predefined CDK tasks, for example:
-
-- resolving and using SSO credentials from running `aws sso login`;
-- resolving configurations from config files in `configs/` and configurations passed in the command line, then converting the
-configurations into runtime contexts that CDK supports;
-- standardising the CDK toolkit name and parameters supported
-by CDK tasks
-
-Most of the CDK tasks should be supported and can be invoked by running:
-
-```sh
-gulp synth \                # cdk task; enum: synth, diff, deploy, destroy
-    --env dev \             # environment to deploy to; enum: dev, sit, uat, prod
-   [--stack '*'] \          # optional; pattern of stack id to deploy; default is '*' deploys all stack
-   [--region eu-west-1] \   # optional; aws region; default is us-east-1
-   [...--context Key=value] # optional; runtime configurations; overwrites configuration from config files; accessible in cdk through runtime contexts
 ```
