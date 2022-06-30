@@ -25,7 +25,7 @@ export class HelloWorldStack extends Stack {
         const fn = new Function(this, "HelloWorldFunction", {
             handler: "index.handler",
             runtime: Runtime.NODEJS_16_X,
-            code: Code.fromAsset(join(__dirname, "..", "lambdas/hello-world")),
+            code: Code.fromAsset(join(__dirname, "..", "build/dist/hello-world.zip")),
         });
     }
 }
