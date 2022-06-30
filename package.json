@@ -19,6 +19,7 @@
     "gulp": "^4.0.2",
     "gulp-clean": "^0.4.0",
     "gulp-execa": "^3.0.2",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "jest": "^26.4.2",
     "minimist": "^1.2.5",
     "ts-jest": "^26.2.0",

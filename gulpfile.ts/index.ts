@@ -2,13 +2,25 @@ import { ConfigResolver } from "../src/util";
 import { Argument } from "./internal/Argument";
 import { cdkCommand, DEFAULT_REGION } from "./internal/Cdk";
 
-const { src, series } = require("gulp");
+const { src, series, dest } = require("gulp");
 const gulpClean = require("gulp-clean");
+const gulpTs = require("gulp-typescript");
 
-const BUILD_DIR = "build"
+// Default directories
+const FUNCTIONS_DIR = "lambdas";
+const BUILD_DIR = "build";
+const FUNCTIONS_OUTPUT_DIR = `${BUILD_DIR}/${FUNCTIONS_DIR}`;
 
-// TASKS
-export async function bootstrap() {
+// Lambda tasks
+function buildLambdas() {
+    const tsProject = gulpTs.createProject("tsconfig.json");
+    return src(`${FUNCTIONS_DIR}/**/*.ts`)
+        .pipe(tsProject()).js
+        .pipe(dest(FUNCTIONS_OUTPUT_DIR))
+}
+
+// CDK tasks
+export function bootstrap() {
     const env = Argument.requiredString("env");
     const accountId = ConfigResolver.getAccountIdByEnvironment(env)
     const region = Argument.optionalString("region", DEFAULT_REGION)
