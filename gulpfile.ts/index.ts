@@ -1,15 +1,19 @@
 import { ConfigResolver } from "../src/util";
 import { Argument } from "./internal/Argument";
 import { cdkCommand, DEFAULT_REGION } from "./internal/Cdk";
+import { parse } from "path";
 
 const { src, series, dest } = require("gulp");
+const glob = require("glob");
 const gulpClean = require("gulp-clean");
 const gulpTs = require("gulp-typescript");
+const gulpZip = require("gulp-zip");
 
 // Default directories
 const FUNCTIONS_DIR = "lambdas";
 const BUILD_DIR = "build";
 const FUNCTIONS_OUTPUT_DIR = `${BUILD_DIR}/${FUNCTIONS_DIR}`;
+const DIST_DIR = `${BUILD_DIR}/dist`;
 
 // Lambda tasks
 function buildLambdas() {
@@ -17,6 +21,22 @@ function buildLambdas() {
     return src(`${FUNCTIONS_DIR}/**/*.ts`)
         .pipe(tsProject()).js
         .pipe(dest(FUNCTIONS_OUTPUT_DIR))
+}
+
+function zipLambdas() {
+    const functionDirs = glob.sync(`${FUNCTIONS_OUTPUT_DIR}/*`);
+    const promises = functionDirs.map((functionDir: string) =>
+        new Promise(resolve => {
+            const functionName = parse(functionDir).base;
+            resolve(
+                src(`${functionDir}/*`)
+                    .pipe(gulpZip(`${functionName}.zip`))
+                    .pipe(dest(DIST_DIR))
+            )
+        })
+    );
+
+    return Promise.all(promises);
 }
 
 // CDK tasks
