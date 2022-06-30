@@ -39,6 +39,8 @@ function zipLambdas() {
     return Promise.all(promises);
 }
 
+export const packageLambdas = series(buildLambdas, zipLambdas);
+
 // CDK tasks
 export function bootstrap() {
     const env = Argument.requiredString("env");
