@@ -1,6 +1,6 @@
 import { ConfigResolver } from "../src/util";
-import { Argument } from "./Argument";
-import { cdkCommand, DEFAULT_REGION } from "./Cdk";
+import { Argument } from "./internal/Argument";
+import { cdkCommand, DEFAULT_REGION } from "./internal/Cdk";
 
 const { src, series } = require("gulp");
 const gulpClean = require("gulp-clean");

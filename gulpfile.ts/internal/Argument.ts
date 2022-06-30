@@ -1,5 +1,10 @@
 const argv = require("minimist")(process.argv.slice(2))
 
+// Use to resolve command line arguments
+// For example, user executes `gulp deploy --env=dev`
+// const environment = Argument.requiredString("env") // returns dev
+// const label = Argument.optionalString("label")     // returns undefined
+// const name = Argument.requiredString("name")       // throws exception Required command-line argument ...
 export class Argument {
     static requiredString(key: string): string {
         const value = this.optionalString(key)

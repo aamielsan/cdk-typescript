@@ -1,4 +1,4 @@
-import { ConfigResolver } from "../src/util";
+import { ConfigResolver } from "../../src/util";
 import { Argument } from "./Argument";
 
 const { fromSSO } = require("@aws-sdk/credential-provider-sso");
@@ -40,7 +40,7 @@ export async function cdkCommand(params: {
     const toolkitStackName = `${env}-cdk-toolkit`;
     const runtimeContextArgs = Object.entries(runtimeContext)
         .map(([key, value]) =>
-            `--context=${key}=${value}` // execa treats spaces as delimiter, that's why the 'context='
+            `--context=${key}=${value}` // execa treats spaces as delimiter, that's why the 'context=key=value'
         );
 
     console.log(`\nRunning \`${command}\` with runtime context:`, runtimeContext, "\n");
