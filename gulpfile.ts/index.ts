@@ -20,51 +20,44 @@ export async function bootstrap() {
     });
 }
 
-async function _synth() {
+export const synth = series(bootstrap, () => {
     const stack = Argument.optionalString("stack", "*");
     return cdkCommand({
         command: "synth",
         commandParams: `${stack}`,
         outputDir: `${BUILD_DIR}/cdk.out.synth/`,
     });
-}
+});
 
-export const synth = series(bootstrap, _synth);
-
-async function _diff() {
+export const diff = series(bootstrap, () => {
     const stack = Argument.optionalString("stack", "*");
     return cdkCommand({
         command: "diff",
         commandParams: `${stack}`,
         outputDir: `${BUILD_DIR}/cdk.out.diff/`,
     });
-}
+});
 
-export const diff = series(bootstrap, _diff);
-
-async function _deploy() {
+export const deploy = series(bootstrap, () => {
     const stack = Argument.optionalString("stack", "*");
     return cdkCommand({
         command: "deploy",
         commandParams: `${stack}`,
         outputDir: `${BUILD_DIR}/cdk.out.deploy/`,
     });
-}
+});
 
-export const deploy = series(bootstrap, _deploy)
-
-async function _destroy() {
+export const destroy = series(bootstrap, () => {
     const stack = Argument.optionalString("stack", "*");
     return cdkCommand({
         command: "destroy",
         commandParams: `${stack}`,
         outputDir: `${BUILD_DIR}/cdk.out.deploy/`,
     });
-}
+});
 
-export const destroy = series(bootstrap, _destroy);
-
+// Utility tasks
 export function clean() {
     return src(`${BUILD_DIR}/`, { read: false })
         .pipe(gulpClean());
-}
+};
