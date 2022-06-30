@@ -3,7 +3,7 @@ import { Argument } from "./internal/Argument";
 import { cdkCommand, DEFAULT_REGION } from "./internal/Cdk";
 import { parse } from "path";
 
-const { src, series, dest } = require("gulp");
+const { src, series, dest, parallel } = require("gulp");
 const glob = require("glob");
 const gulpClean = require("gulp-clean");
 const gulpTs = require("gulp-typescript");
@@ -72,14 +72,17 @@ export const diff = series(bootstrap, () => {
     });
 });
 
-export const deploy = series(bootstrap, () => {
-    const stack = Argument.optionalString("stack", "*");
-    return cdkCommand({
-        command: "deploy",
-        commandParams: `${stack}`,
-        outputDir: `${BUILD_DIR}/cdk.out.deploy/`,
-    });
-});
+export const deploy = series(
+    parallel(bootstrap, packageLambdas),
+    () => {
+        const stack = Argument.optionalString("stack", "*");
+        return cdkCommand({
+            command: "deploy",
+            commandParams: `${stack}`,
+            outputDir: `${BUILD_DIR}/cdk.out.deploy/`,
+        });
+    }
+);
 
 export const destroy = series(bootstrap, () => {
     const stack = Argument.optionalString("stack", "*");
