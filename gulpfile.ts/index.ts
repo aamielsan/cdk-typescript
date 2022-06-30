@@ -54,23 +54,29 @@ export function bootstrap() {
     });
 }
 
-export const synth = series(bootstrap, () => {
-    const stack = Argument.optionalString("stack", "*");
-    return cdkCommand({
-        command: "synth",
-        commandParams: `${stack}`,
-        outputDir: `${BUILD_DIR}/cdk.out.synth/`,
-    });
-});
+export const synth = series(
+    bootstrap,
+    () => {
+        const stack = Argument.optionalString("stack", "*");
+        return cdkCommand({
+            command: "synth",
+            commandParams: `${stack}`,
+            outputDir: `${BUILD_DIR}/cdk.out.synth/`,
+        });
+    }
+);
 
-export const diff = series(bootstrap, () => {
-    const stack = Argument.optionalString("stack", "*");
-    return cdkCommand({
-        command: "diff",
-        commandParams: `${stack}`,
-        outputDir: `${BUILD_DIR}/cdk.out.diff/`,
-    });
-});
+export const diff = series(
+    bootstrap,
+    () => {
+        const stack = Argument.optionalString("stack", "*");
+        return cdkCommand({
+            command: "diff",
+            commandParams: `${stack}`,
+            outputDir: `${BUILD_DIR}/cdk.out.diff/`,
+        });
+    }
+);
 
 export const deploy = series(
     parallel(bootstrap, packageLambdas),
@@ -84,14 +90,17 @@ export const deploy = series(
     }
 );
 
-export const destroy = series(bootstrap, () => {
-    const stack = Argument.optionalString("stack", "*");
-    return cdkCommand({
-        command: "destroy",
-        commandParams: `${stack}`,
-        outputDir: `${BUILD_DIR}/cdk.out.deploy/`,
-    });
-});
+export const destroy = series(
+    bootstrap,
+    () => {
+        const stack = Argument.optionalString("stack", "*");
+        return cdkCommand({
+            command: "destroy",
+            commandParams: `${stack}`,
+            outputDir: `${BUILD_DIR}/cdk.out.deploy/`,
+        });
+    }
+);
 
 // Utility tasks
 export function clean() {
