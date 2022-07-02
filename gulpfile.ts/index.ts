@@ -10,15 +10,16 @@ const gulpTs = require("gulp-typescript");
 const gulpZip = require("gulp-zip");
 
 // Default directories
-const FUNCTIONS_DIR = "lambdas";
+const FUNCTIONS_DIR = "functions";
 const BUILD_DIR = "build";
+const FUNCTIONS_SRC_DIR = `src/${FUNCTIONS_DIR}`;
 const FUNCTIONS_OUTPUT_DIR = `${BUILD_DIR}/${FUNCTIONS_DIR}`;
 const DIST_DIR = `${BUILD_DIR}/dist`;
 
 // Lambda tasks
 function buildLambdas() {
     const tsProject = gulpTs.createProject("tsconfig.json");
-    return src(`${FUNCTIONS_DIR}/**/*.ts`)
+    return src(`${FUNCTIONS_SRC_DIR}/**/*.ts`)
         .pipe(tsProject()).js
         .pipe(dest(FUNCTIONS_OUTPUT_DIR))
 }
