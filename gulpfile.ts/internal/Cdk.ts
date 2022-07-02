@@ -20,6 +20,7 @@ export async function cdkCommand(params: {
     } = params;
 
     const env = Argument.requiredString("env");
+    const label = Argument.optionalString("label");
     const region = Argument.optionalString("region", DEFAULT_REGION);
     const profile = Argument.optionalString("profile", env);
     const credentials = await fromSSO({ profile })();
@@ -27,6 +28,7 @@ export async function cdkCommand(params: {
     const defaultContext = {
         "Account": ConfigResolver.getAccountIdByEnvironment(env),
         "Environment": env,
+        "Label": label,
         "Region": region,
     }
     const configContext = await ConfigResolver.getConfigsByEnvironment(env);
