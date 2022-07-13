@@ -9,6 +9,7 @@
     "gulp": "gulp"
   },
   "devDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.128.0",
     "@aws-sdk/credential-provider-sso": "^3.40.0",
     "@aws-sdk/credential-providers": "^3.40.0",
     "@types/jest": "^26.0.10",
