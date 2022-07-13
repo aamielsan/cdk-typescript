@@ -1,9 +1,9 @@
-import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb"
+import * as AWS from "aws-sdk";
 
-const client = new DynamoDBClient({});
+const client = new AWS.DynamoDB()
 
 const tableArn = process.env["TABLE_ARN"];
-const tableName = process.env["TABLE_NAME"];
+const tableName: string = process.env["TABLE_NAME"]!;
 const tableStreamArn = process.env["TABLE_STREAM_ARN"];
 
 export async function handler() {
@@ -13,12 +13,13 @@ export async function handler() {
         tableStreamArn,
     });
 
-    try {
-        const response = await client.send(new ScanCommand({
-            TableName: tableName,
-        }));
-        console.log(`Database items: ${response.Items}`);
-    } catch (err) {
-        console.log(`Error:`, err);
-    }
+    client.scan({
+        TableName: tableName,
+    }, (err, response) => {
+        if (!err) {
+            console.log(`Database items: ${response.Items}`);
+        } else {
+            console.log(`Error encountered: ${err}`);
+        }
+    });
 }
