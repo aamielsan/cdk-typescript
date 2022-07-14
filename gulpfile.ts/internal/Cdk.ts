@@ -4,7 +4,7 @@ import { Argument } from "./Argument";
 const { fromSSO } = require("@aws-sdk/credential-provider-sso");
 const execa = require("execa");
 
-type StringMap = { [key: string]: string }
+type StringMap = { [key: string]: string | null }
 
 export const DEFAULT_REGION = "us-east-1"
 
@@ -30,7 +30,8 @@ export async function cdkCommand(params: {
         "Environment": env,
         "Label": label,
         "Region": region,
-    }
+    };
+
     const configContext = await ConfigResolver.getConfigsByEnvironment(env);
     const commandLineContext = Argument.optionalStringArray("context", []);
     const runtimeContext = resolveRuntimeContext({
@@ -86,9 +87,20 @@ function resolveRuntimeContext({
         }
     }, {});
 
-    return {
+    const contextMap = {
         ...defaultContext,
         ...configContext,
         ...commandLineContextMap
     };
+
+    return Object.entries(contextMap).reduce((acc, [key, value]) => {
+        if (value === undefined) {
+            return acc;
+        }
+
+        return {
+            ...acc,
+            [key]: value,
+        };
+    }, {});
 }

@@ -14,7 +14,7 @@ export class Argument {
         return value
     }
 
-    static optionalString(key: string, defaultValue?: string): string {
+    static optionalString(key: string, defaultValue: string | undefined | null = undefined): string {
         return argv[key] || defaultValue;
     }
 
