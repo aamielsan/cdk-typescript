@@ -4,25 +4,26 @@ import { Construct } from "constructs";
 import { join } from "path";
 import { Naming } from "../util";
 
-interface ApiStackProps {
+interface HelloWorldStackProps {
     account: string;
     region: string;
     environment: string;
-    label: string;
+    label: string | undefined;
 }
 
 export class HelloWorldStack extends Stack {
     private naming: Naming;
 
-    constructor(scope: Construct, id: string, props: ApiStackProps) {
+    constructor(scope: Construct, id: string, props: HelloWorldStackProps) {
         const naming = new Naming({
             env: props.environment,
             baseName: "hello-world",
             label: props.label,
         });
 
+        const stackName = naming.prefixWithNamespaceModuleName("stack");
         const stackProps: StackProps = {
-            stackName: naming.prefixWithNamespaceModuleName("stack"),
+            stackName,
             env: {
                 account: props.account,
                 region: props.region,

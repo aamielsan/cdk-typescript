@@ -11,6 +11,6 @@ const app = new App();
 new HelloWorldStack(app, "HelloWorldStack", {
     account: Context.requiredString(app, "Account"),
     environment: Context.requiredString(app, "Environment"),
-    label: Context.requiredString(app, "Label"),
+    label: Context.optionalString(app, "Label"),
     region: Context.requiredString(app, "Region"),
 })
